@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 
 import android.widget.Toast;
-import androidx.loader.content.Loader;
 import com.kaixugege.latte_core.delegates.LatteDelegate;
 import com.kaixugege.latte_core.net.RestClient;
 import com.kaixugege.latte_core.net.callback.IError;
 import com.kaixugege.latte_core.net.callback.IFailure;
 import com.kaixugege.latte_core.net.callback.ISuccess;
 import com.kaixugege.latte_core.ui.LoaderStyle;
+
 
 /**
  * @Author: KaixuGege
@@ -37,7 +37,7 @@ public class ExampleDelegate extends LatteDelegate {
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-//                        Toast.makeText(getContext(), (String) response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), (String) response, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .failure(
@@ -55,7 +55,12 @@ public class ExampleDelegate extends LatteDelegate {
 
                     }
                 })
+                .downloadDIr("")
+                .extension("")
+
                 .build()
-                .get();
+                .download();
+//                .get();
+
     }
 }
