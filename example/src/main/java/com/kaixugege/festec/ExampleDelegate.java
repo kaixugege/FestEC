@@ -1,6 +1,7 @@
 package com.kaixugege.festec;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import android.widget.Toast;
@@ -9,7 +10,6 @@ import com.kaixugege.latte_core.net.RestClient;
 import com.kaixugege.latte_core.net.callback.IError;
 import com.kaixugege.latte_core.net.callback.IFailure;
 import com.kaixugege.latte_core.net.callback.ISuccess;
-import com.kaixugege.latte_core.ui.LoaderStyle;
 
 
 /**
@@ -32,11 +32,13 @@ public class ExampleDelegate extends LatteDelegate {
 
     private void testRestClient() {
         RestClient.builder()
-                .url("https://www.baidu.com/")
-                .loader(getContext(), LoaderStyle.PacmanIndicator)
+                .url("http://127.0.0.1/index")
+//                .url("https://www.baidu.com")
+                .loader(getContext())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
+                        Log.d("HAHAHAHA", response);
                         Toast.makeText(getContext(), (String) response, Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -44,7 +46,7 @@ public class ExampleDelegate extends LatteDelegate {
                         new IFailure() {
                             @Override
                             public void onFailure() {
-
+                                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -52,15 +54,15 @@ public class ExampleDelegate extends LatteDelegate {
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
-
+                        Toast.makeText(getContext(), "onError", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .downloadDIr("")
                 .extension("")
 
                 .build()
-                .download();
-//                .get();
+//                .download();
+                .get();
 
     }
 }

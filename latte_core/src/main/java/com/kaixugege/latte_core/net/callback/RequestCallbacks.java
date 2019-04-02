@@ -1,14 +1,12 @@
 package com.kaixugege.latte_core.net.callback;
 
-import android.content.Context;
 import android.os.Handler;
-import com.kaixugege.latte_core.ui.LatteLoader;
-import com.kaixugege.latte_core.ui.LoaderStyle;
+import android.util.Log;
+import com.kaixugege.latte_core.ui.loader.LatteLoader;
+import com.kaixugege.latte_core.ui.loader.LoaderStyle;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.security.KeyStore;
 
 /**
  * @Author: KaixuGege
@@ -62,6 +60,8 @@ public class RequestCallbacks implements Callback {
 
     @Override
     public void onFailure(Call call, Throwable t) {
+        Log.d("HAHAHA","-------------------------------------------------------");
+        Log.d("HAHAHA","retrofit failed "+t.getMessage());
         if (FAILURE != null) {
             FAILURE.onFailure();
         }

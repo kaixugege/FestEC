@@ -1,10 +1,12 @@
-package com.kaixugege.latte_core.ui;
+package com.kaixugege.latte_core.ui.loader;
 
 import android.content.Context;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.Indicator;
 
 import java.util.WeakHashMap;
+
+import static com.kaixugege.latte_core.R2.style.AVLoadingIndicatorView;
 
 /**
  * @Author: KaixuGege
@@ -16,6 +18,7 @@ import java.util.WeakHashMap;
  * 官方的实现是通过反射来通过取load名字来加载出来的
  */
 public final class LoaderCrator {
+
     private static final WeakHashMap<String, Indicator> LOADING_MAP = new WeakHashMap<>();
 
     static AVLoadingIndicatorView create(String type, Context context){

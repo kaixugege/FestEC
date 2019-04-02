@@ -1,12 +1,16 @@
 package com.kaixugege.latte_core.net;
 
 import android.os.StatFs;
+import com.kaixugege.latte_core.app.ConfigKeys;
 import com.kaixugege.latte_core.app.ConfigType;
 import com.kaixugege.latte_core.app.Latte;
+import com.kaixugege.latte_core.net.rx.RxRestService;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import java.util.ArrayList;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +26,7 @@ public class RestCreator {
     private static final class ParamsHolder {
         private static final WeakHashMap<String, Object> PARAMS = new WeakHashMap<>();
     }
+
     //这里是惰性加载
     public static WeakHashMap<String, Object> getParans() {
         return ParamsHolder.PARAMS;
@@ -44,17 +49,37 @@ public class RestCreator {
 
     private static final class OKHttpHolder {
         private static final int TIME_OUT = 60;
-        private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient().newBuilder()
+        private static OkHttpClient.Builder BUILDER = new OkHttpClient.Builder();
+        private static final ArrayList<Interceptor> INTERCEPTORS = Latte.getConfigurations(ConfigKeys.INTERCEPTOR);
 
-//                .addInterceptor()  //拦截器
+        private static final OkHttpClient OK_HTTP_CLIENT = addInterceptor()
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .build();
+
+        private static OkHttpClient.Builder addInterceptor() {
+            if (INTERCEPTORS != null && !INTERCEPTORS.isEmpty()) {
+                for (Interceptor interceptor : INTERCEPTORS) {
+                    BUILDER.addInterceptor(interceptor);
+                }
+            }
+            return BUILDER;
+        }
     }
 
     private static final class RestServiceHolder {
         private static final RestService REST_SERVICE =
                 RetrofitHodle.RETROFIT_CLIENT.create(RestService.class);
     }
+
+    private static final class RxRestServiceHolder {
+        private static final RxRestService REST_SERVICE =
+                RetrofitHodle.RETROFIT_CLIENT.create(RxRestService.class);
+    }
+
+    public static RxRestService getRxRestService() {
+        return RxRestServiceHolder.REST_SERVICE;
+    }
+
 
 }
 

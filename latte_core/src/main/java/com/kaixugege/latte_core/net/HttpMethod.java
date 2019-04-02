@@ -8,5 +8,5 @@ package com.kaixugege.latte_core.net;
  * Info:
  */
 public enum HttpMethod {
-    GET, POST, PUT, DELETE
+    GET,POST_RAW, POST, PUT_RAW,PUT, DELETE,UPLOAD
 }

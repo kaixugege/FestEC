@@ -1,5 +1,8 @@
 package com.kaixugege.latte_core.app;
 
+import okhttp3.Interceptor;
+
+import java.util.ArrayList;
 import java.util.WeakHashMap;
 
 /**
@@ -14,7 +17,8 @@ import java.util.WeakHashMap;
 public class Configurator {
 
     //配置
-    private static final WeakHashMap<String, Object> LATTE_CONFIGS = new WeakHashMap<>();
+    private static final WeakHashMap<Object, Object> LATTE_CONFIGS = new WeakHashMap<>();
+    private static final ArrayList<Interceptor> INTERCEPTORS = new ArrayList<>();//okhttp 的拦截器
 
     private Configurator() {
         LATTE_CONFIGS.put(ConfigType.CONFIG_READY.name(), false);//这里默认这个配置文件为false
@@ -25,7 +29,7 @@ public class Configurator {
         return Holder.INSTANCE;
     }
 
-    public WeakHashMap<String, Object> getLatteConfigs() {
+    public WeakHashMap<Object, Object> getLatteConfigs() {
 
         return LATTE_CONFIGS;
 
@@ -45,6 +49,18 @@ public class Configurator {
     }
 
 
+    public final Configurator withInterceptor(Interceptor interceptor){
+        INTERCEPTORS.add(interceptor);
+        LATTE_CONFIGS.put(ConfigKeys.INTERCEPTOR,INTERCEPTORS);
+        return this;
+    }
+
+    public final Configurator withInterceptors(ArrayList<Interceptor> interceptors){
+        INTERCEPTORS.addAll(interceptors);
+        LATTE_CONFIGS.put(ConfigKeys.INTERCEPTOR,INTERCEPTORS);
+        return this;
+    }
+
     /**
      * 保证配置的完整性和安全性
      *
@@ -60,10 +76,13 @@ public class Configurator {
 
     //这个注释是说这个类型并没有检测过，但是不抛出警告
     @SuppressWarnings("unchecked")
-    final <T>  T getConfiguration(Enum<ConfigType> key){
+    public final <T>  T getConfiguration(Object key){
         checkConfiguratio();
-        return (T)LATTE_CONFIGS.get(key.name());
-
+        final Object value = LATTE_CONFIGS.get(key);
+        if (value == null) {
+            throw new NullPointerException(key.toString() + " IS NULL");
+        }
+        return (T) LATTE_CONFIGS.get(key);
     }
 
 }

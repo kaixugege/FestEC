@@ -2,8 +2,9 @@ package com.kaixugege.latte_core.net;
 
 import android.content.Context;
 import com.kaixugege.latte_core.net.callback.*;
-import com.kaixugege.latte_core.ui.LatteLoader;
-import com.kaixugege.latte_core.ui.LoaderStyle;
+import com.kaixugege.latte_core.net.download.DownloadHandler;
+import com.kaixugege.latte_core.ui.loader.LatteLoader;
+import com.kaixugege.latte_core.ui.loader.LoaderStyle;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -14,7 +15,7 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * @Author: KaixuGege
+ * Author: KaixuGege
  * Time:           2019/1/30
  * ProjectName:    FestEC
  * ClassName:
@@ -32,12 +33,16 @@ public class RestClient {
     private final String URL;
     private static final Map<String, Object> PARAMS = RestCreator.getParans();
     private final IRequest REQUEST;
+    private final String DOWNLOAD_DIR;//文件下载
+    private final String EXTENSION;
+    private final String NAME;
     private final ISuccess SUCCESS;
     private final IError ERROR;
     private final IFailure FAILURE;
     private final RequestBody BODY;
     private final File FILE;
     private LoaderStyle LOADER_STYLE;
+
 
     private Context CONTEXT;
 
@@ -51,7 +56,10 @@ public class RestClient {
                       RequestBody BODY,
                       File file,
                       Context context,
-                      LoaderStyle loaderStyle) {
+                      LoaderStyle loaderStyle,
+                      String download_dir,
+                      String extension,
+                      String name) {
         this.URL = mUrl;
         this.PARAMS.putAll(params);
         this.REQUEST = REQUEST;
@@ -62,6 +70,9 @@ public class RestClient {
         this.CONTEXT = context;
         this.LOADER_STYLE = loaderStyle;
         this.FILE = file;
+        this.DOWNLOAD_DIR = download_dir;
+        this.EXTENSION = extension;
+        this.NAME = name;
     }
 
     // 建造者，以Builder 方式传递
@@ -110,8 +121,8 @@ public class RestClient {
                 final RequestBody requestBody =
                         RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()), FILE);
                 final MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("file", FILE.getName(),requestBody);
-                call = RestCreator.getRestService().upload(URL,body);
+                        MultipartBody.Part.createFormData("file", FILE.getName(), requestBody);
+                call = RestCreator.getRestService().upload(URL, body);
                 break;
 
             default:
@@ -124,6 +135,7 @@ public class RestClient {
 
     }
 
+    @SuppressWarnings("unchecked")
     private Callback<String> getRequestCallback() {
         return new RequestCallbacks(REQUEST, SUCCESS, ERROR, FAILURE, LOADER_STYLE);
     }
@@ -160,5 +172,15 @@ public class RestClient {
 
     public final void delete() {
         request(HttpMethod.DELETE);
+    }
+
+    public final void upload() {
+        request(HttpMethod.UPLOAD);
+    }
+
+    public final void download() {
+        new DownloadHandler(URL, REQUEST, DOWNLOAD_DIR, EXTENSION, NAME, SUCCESS, ERROR, FAILURE)
+                .handleDownload();
+
     }
 }

@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import com.kaixugege.latte_core.activites.ProxyActivity;
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 
 /**
@@ -25,27 +25,31 @@ public abstract class BaseDelegate extends SwipeBackFragment {
 
     public abstract Object setLayout();
 
-    public abstract void onBindView( Bundle savedInstanceState, View rootView);//当绑定视图的时候
+    public abstract void onBindView(Bundle savedInstanceState, View rootView);//当绑定视图的时候
 
 
     @Override
-    public View onCreateView( LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = null;
+        final View rootView;
         if (setLayout() instanceof Integer) {
             rootView = inflater.inflate((Integer) setLayout(), container, false);
         } else if (setLayout() instanceof View) {
-            rootView = (View) rootView;
+            rootView = (View) setLayout();
+        } else {
+            throw new ClassCastException("setLayout() type must be int or View!");
         }
 
-        if (rootView != null) {
-            mUnbinder = ButterKnife.bind(this, rootView);
-            this.rootView = rootView;
-            onBindView(savedInstanceState, rootView);
-        }
+        this.rootView = rootView;
+        onBindView(savedInstanceState, rootView);
+
         return rootView;
     }
 
+
+    public final ProxyActivity getProxyActivity(){
+        return (ProxyActivity)_mActivity;
+    }
 
     @Override
     public void onDestroyView() {

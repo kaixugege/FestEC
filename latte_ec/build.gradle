@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+
 
 android {
     compileSdkVersion 28
@@ -30,5 +32,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+//黄油刀
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+
     api project(':latte_core')
 }

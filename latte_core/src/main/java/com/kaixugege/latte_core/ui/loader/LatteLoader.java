@@ -1,7 +1,6 @@
-package com.kaixugege.latte_core.ui;
+package com.kaixugege.latte_core.ui.loader;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;

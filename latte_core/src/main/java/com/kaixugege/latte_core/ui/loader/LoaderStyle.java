@@ -1,4 +1,4 @@
-package com.kaixugege.latte_core.ui;
+package com.kaixugege.latte_core.ui.loader;
 
 import com.wang.avi.indicators.*;
 

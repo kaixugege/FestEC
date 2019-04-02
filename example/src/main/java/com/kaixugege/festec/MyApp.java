@@ -2,6 +2,7 @@ package com.kaixugege.festec;
 
 import android.app.Application;
 import com.kaixugege.latte_core.app.Latte;
+import com.kaixugege.latte_core.net.Inrerceptors.DebugInterceptor;
 
 /**
  * @Author: KaixuGege
@@ -17,6 +18,7 @@ public class MyApp extends Application {
         super.onCreate();
         Latte.init(this)
                 .withApiHost("http://127.0.0.1")
+                .withInterceptor(new DebugInterceptor("index",R.raw.test))
                 .configure();
     }
 
