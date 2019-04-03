@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
+
+
 android {
     compileSdkVersion 28
 
@@ -74,4 +76,11 @@ dependencies {
     //字体图标
     api 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
     api 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
+
+    //数据库依赖
+    api 'org.greenrobot:greendao-generator:3.2.2'
+    api 'org.greenrobot:greendao:3.2.2'
+
+    //Log
+    api 'com.orhanobut:logger:2.1.1'
 }

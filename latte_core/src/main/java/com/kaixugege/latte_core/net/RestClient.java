@@ -150,8 +150,8 @@ public class RestClient {
         if (BODY != null) {
             request(HttpMethod.POST);
         } else {
-            if (!PARAMS.isEmpty()) {
-                throw new RuntimeException("params must be null");
+            if (PARAMS.isEmpty()) {
+                throw new RuntimeException("params must be not null");
             }
             request(HttpMethod.POST_RAW);
         }

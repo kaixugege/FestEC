@@ -11,7 +11,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.kaixugege.latte.ec.R;
 import com.kaixugege.latte_core.delegates.LatteDelegate;
 import com.kaixugege.latte_core.net.RestClient;
+import com.kaixugege.latte_core.net.callback.IFailure;
 import com.kaixugege.latte_core.net.callback.ISuccess;
+import com.kaixugege.latte_core.util.log.LatteLog;
 
 import java.util.regex.Pattern;
 
@@ -103,12 +105,27 @@ public class SignUpDelegate extends LatteDelegate implements View.OnClickListene
     public void onClick(View v) {
         if (v.getId() == btn_sign.getId()) {
             if (checkForm()) {
-//                RestClient.builder().url("sign_up").params("", "").success(new ISuccess() {
-//                    @Override
-//                    public void onSuccess(String response) {
-//
-//                    }
-//                }).build().post();
+                RestClient.builder()
+                        .url("http://192.168.99.179/RestDataServer/api/user_profile")
+                        .params("name", mName.getText().toString())
+                        .params("email", mEmail.getText().toString())
+                        .params("phone", mPhoneNumber.getText().toString())
+                        .params("password", mPassword.getText().toString() )
+                        .success(new ISuccess() {
+                            @Override
+                            public void onSuccess(String response) {
+                                LatteLog.d("USER_PROFILE",response);
+                                SignHandler.onSignUp(response);
+                            }
+                        })
+                        .failure(new IFailure() {
+                            @Override
+                            public void onFailure() {
+                                LatteLog.d("USER_PROFILE","失败了。。");
+                            }
+                        })
+                        .build()
+                        .post();
                 Toast.makeText(getContext(), "通过验证", Toast.LENGTH_SHORT).show();
             }
         } else {
