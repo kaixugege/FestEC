@@ -11,6 +11,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.kaixugege.latte.ec.R;
 import com.kaixugege.latte_core.delegates.LatteDelegate;
 import com.kaixugege.latte_core.net.RestClient;
+import com.kaixugege.latte_core.net.callback.IError;
 import com.kaixugege.latte_core.net.callback.IFailure;
 import com.kaixugege.latte_core.net.callback.ISuccess;
 import com.kaixugege.latte_core.util.log.LatteLog;
@@ -106,7 +107,7 @@ public class SignUpDelegate extends LatteDelegate implements View.OnClickListene
         if (v.getId() == btn_sign.getId()) {
             if (checkForm()) {
                 RestClient.builder()
-                        .url("http://192.168.99.179/RestDataServer/api/user_profile")
+                        .url("http://192.168.10.23/RestDataServer/api/user_profile")
                         .params("name", mName.getText().toString())
                         .params("email", mEmail.getText().toString())
                         .params("phone", mPhoneNumber.getText().toString())
@@ -121,7 +122,13 @@ public class SignUpDelegate extends LatteDelegate implements View.OnClickListene
                         .failure(new IFailure() {
                             @Override
                             public void onFailure() {
-                                LatteLog.d("USER_PROFILE","失败了。。");
+                                LatteLog.e("USER_PROFILE","失败了。。");
+                            }
+                        })
+                        .error(new IError() {
+                            @Override
+                            public void onError(int code, String msg) {
+                                LatteLog.e("USER_PROFILE","异常。。"+msg.toString());
                             }
                         })
                         .build()

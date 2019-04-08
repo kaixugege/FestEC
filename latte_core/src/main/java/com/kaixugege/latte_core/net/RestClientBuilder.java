@@ -70,8 +70,14 @@ public class RestClientBuilder {
     }
 
     public final RestClientBuilder params(String key, Object value) {
-
+        if (this.mPARAMS == null){
+            System.out.println(" params 为空");
+        }
+        if(this.mPARAMS.isEmpty()){
+            System.out.println(" params 里面没数据");
+        }
         this.mPARAMS.put(key, value);
+        System.out.println(" params 数据="+this.mPARAMS.toString());
         return this;
     }
 

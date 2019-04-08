@@ -37,4 +37,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     api project(':latte_ec')
     annotationProcessor project(':latte_compiler')
+
+    //调试神器
+    api "com.facebook.stetho:stetho:1.4.2"
+    api "com.facebook.stetho:stetho-okhttp3:1.4.2"
 }

@@ -102,7 +102,7 @@ public class RestClient {
                 break;
 
             case PUT_RAW:
-                call = service.put(URL, PARAMS);
+                call = service.putRaw(URL, BODY);
                 break;
 
             case POST:
@@ -147,11 +147,13 @@ public class RestClient {
     }
 
     public final void post() {
-        if (BODY != null) {
+        if (BODY == null) {
+            System.out.println("post body="+BODY+" 开始post");
             request(HttpMethod.POST);
         } else {
+            System.out.println("post body ！="+BODY+" 开始postRaw");
             if (PARAMS.isEmpty()) {
-                throw new RuntimeException("params must be not null");
+                throw new RuntimeException("params must be  null "+PARAMS.isEmpty());
             }
             request(HttpMethod.POST_RAW);
         }
