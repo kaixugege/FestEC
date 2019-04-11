@@ -148,7 +148,7 @@ public class RestClient {
 
     public final void post() {
         if (BODY == null) {
-            System.out.println("post body="+BODY+" 开始post");
+            System.out.println("post body="+BODY+" PARAMS="+PARAMS.toString()+" 开始post");
             request(HttpMethod.POST);
         } else {
             System.out.println("post body ！="+BODY+" 开始postRaw");

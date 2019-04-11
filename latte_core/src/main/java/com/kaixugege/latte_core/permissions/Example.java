@@ -1,5 +1,6 @@
 package com.kaixugege.latte_core.permissions;
 
+import android.Manifest;
 import android.content.Context;
 
 /**
@@ -11,13 +12,18 @@ import android.content.Context;
  */
 public class Example {
     private void main() {
-        PermissionS permissionS = Director.setBuilderAbs(new PermissionBuilder()
-                .addPer(new Permission("我是权限 a"))
-                .addPer(new Permission("我是权限 b"))
-                .addPer(new Permission("我是权限 c"))
-        ).build();
 
+        Director director = new Director(new PerBuilder())
+                .addPer(new Per(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                .addPer(new Per(Manifest.permission.ACCESS_WIFI_STATE))
+                .addPer(new Per(Manifest.permission.READ_PHONE_STATE))
+                .addPer(new Per(Manifest.permission.ACCESS_FINE_LOCATION))
+                .addPer(new Per(Manifest.permission.ACCESS_COARSE_LOCATION))
+                .addPer(new Per(Manifest.permission.CHANGE_WIFI_STATE))
+                .addPer(new Per(Manifest.permission.SYSTEM_ALERT_WINDOW))
+                .addPer(new Per(Manifest.permission.INTERNET))
+                .addPer(new Per(Manifest.permission.CALL_PHONE))
+                .addPer(new Per(Manifest.permission.CAMERA));
 
-            permissionS.permissions.toString();
     }
 }

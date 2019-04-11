@@ -20,7 +20,9 @@ public class MyApp extends Application {
         super.onCreate();
         Latte.init(this)
                 .withApiHost("http://192.168.10.23")
-                .withInterceptor(new DebugInterceptor("index", R.raw.test))
+                .withInterceptor(new DebugInterceptor("/RestDataServer/api/user_profile", R.raw.signup))
+//                .withInterceptor(new DebugInterceptor("index", R.raw.test))
+
                 .configure();
 
         DatabaseManager.getInstance().init(this);

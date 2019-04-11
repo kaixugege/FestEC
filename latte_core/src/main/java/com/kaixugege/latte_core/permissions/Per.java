@@ -2,12 +2,12 @@ package com.kaixugege.latte_core.permissions;
 
 /**
  * @Author: KaixuGege
- * Time:           2019/4/8
+ * Time:           2019/4/9
  * ProjectName:    FestEC
  * ClassName:
  * Info:
  */
-public class Permission {
+public class Per {
     public String getPermission() {
         return permission;
     }
@@ -16,10 +16,25 @@ public class Permission {
         this.permission = permission;
     }
 
-    public Permission(String permission) {
+
+    public Per(String permission) {
         this.permission = permission;
     }
 
     private String permission;
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    private boolean state;
+
+
+
+
 
 }

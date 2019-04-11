@@ -16,8 +16,8 @@ import org.greenrobot.greendao.annotation.Id;
 @Entity(nameInDb = "user_profile")
 public class UserProfile {
 
-    @Id
-    private long userId = 0;
+    @Id(autoincrement = true)
+    private long userId;
 
     private String name = null;
 
@@ -29,7 +29,7 @@ public class UserProfile {
 
     @Generated(hash = 1202698052)
     public UserProfile(long userId, String name, String avatar, String gender,
-            String address) {
+                       String address) {
         this.userId = userId;
         this.name = name;
         this.avatar = avatar;

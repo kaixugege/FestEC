@@ -5,7 +5,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.ContentFrameLayout;
 import com.kaixugege.latte_core.R;
+import com.kaixugege.latte_core.app.ISignListener;
 import com.kaixugege.latte_core.delegates.LatteDelegate;
+import com.kaixugege.latte_core.ui.launcher.ILauncherListener;
 
 import me.yokeyword.fragmentation.SupportActivity;
 
@@ -16,7 +18,8 @@ import me.yokeyword.fragmentation.SupportActivity;
  * ClassName:
  * Info:
  */
-public abstract class ProxyActivity extends SupportActivity {
+public abstract class ProxyActivity extends SupportActivity  implements
+        ISignListener, ILauncherListener {
     public abstract LatteDelegate setRootDelegate();
 
     @Override

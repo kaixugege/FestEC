@@ -1,22 +1,23 @@
 package com.kaixugege.latte.ec.sign;
 
-import android.media.MediaCodec;
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.kaixugege.latte.ec.R;
+import com.kaixugege.latte_core.app.ISignListener;
 import com.kaixugege.latte_core.delegates.LatteDelegate;
 import com.kaixugege.latte_core.net.RestClient;
 import com.kaixugege.latte_core.net.callback.IError;
 import com.kaixugege.latte_core.net.callback.IFailure;
 import com.kaixugege.latte_core.net.callback.ISuccess;
-import com.kaixugege.latte_core.util.log.LatteLog;
 
-import java.util.regex.Pattern;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -40,6 +41,18 @@ public class SignUpDelegate extends LatteDelegate implements View.OnClickListene
     @Override
     public Object setLayout() {
         return R.layout.delegate_sign_up;
+    }
+
+
+    private ISignListener mISignListener = null;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // activity是否实现了这个接口
+        if (activity instanceof  ISignListener){
+            mISignListener = (ISignListener)activity;
+        }
     }
 
     @Override
@@ -102,38 +115,57 @@ public class SignUpDelegate extends LatteDelegate implements View.OnClickListene
         return isPass;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == btn_sign.getId()) {
-            if (checkForm()) {
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1){
                 RestClient.builder()
-                        .url("http://192.168.10.23/RestDataServer/api/user_profile")
+                        .url("http://192.168.10.23:80/RestDataServer/api/user_profile")
+//                        .url("https://www.baidu.com/")
                         .params("name", mName.getText().toString())
                         .params("email", mEmail.getText().toString())
                         .params("phone", mPhoneNumber.getText().toString())
-                        .params("password", mPassword.getText().toString() )
+                        .params("password", mPassword.getText().toString())
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
-                                LatteLog.d("USER_PROFILE",response);
-                                SignHandler.onSignUp(response);
+//                                LatteLog.d("USER_PROFILE", "返回内容"+response);
+                                Log.d("USER_PROFILE",""+response);
+                                System.out.println("  收到回复消息"+response);
+                                SignHandler.onSignUp(response,mISignListener);
                             }
                         })
                         .failure(new IFailure() {
                             @Override
                             public void onFailure() {
-                                LatteLog.e("USER_PROFILE","失败了。。");
+//                                LatteLog.e("USER_PROFILE", "失败了。。");
+                                Log.d("USER_PROFILE", "失败啦。。" );
                             }
                         })
                         .error(new IError() {
                             @Override
+
                             public void onError(int code, String msg) {
-                                LatteLog.e("USER_PROFILE","异常。。"+msg.toString());
+                                Log.d("USER_PROFILE", "异常。。"+code+"  " + msg.toString());
+//                                LatteLog.e("USER_PROFILE", "异常。。" + msg.toString());
+
                             }
                         })
                         .build()
-                        .post();
+                        .get();
+                Log.d("USER_PROFILE","请求数据了");
                 Toast.makeText(getContext(), "通过验证", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == btn_sign.getId()) {
+            if (checkForm()) {
+                handler.sendEmptyMessage(1);
             }
         } else {
             if (v.getId() == mSignIn.getId()) {

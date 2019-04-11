@@ -1,5 +1,6 @@
 package com.kaixugege.latte.ec.lanucher;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,9 +8,13 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.kaixugege.latte.ec.R;
+import com.kaixugege.latte_core.app.AccountManage;
+import com.kaixugege.latte_core.app.IUserChecker;
 import com.kaixugege.latte_core.delegates.BaseDelegate;
 import com.kaixugege.latte_core.delegates.LatteDelegate;
+import com.kaixugege.latte_core.ui.launcher.ILauncherListener;
 import com.kaixugege.latte_core.ui.launcher.LauncherHolderCreator;
+import com.kaixugege.latte_core.ui.launcher.OnLauncherFinshTag;
 import com.kaixugege.latte_core.ui.launcher.ScollLauncherTag;
 import com.kaixugege.latte_core.util.Storage.LattePreference;
 
@@ -43,8 +48,20 @@ public class LauncherScrollDelegate extends LatteDelegate implements OnItemClick
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
                 .setOnItemClickListener(this)
                 .setCanLoop(false);
-
     }
+
+
+    private ILauncherListener mILauncherListener = null;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof ILauncherListener) {
+            mILauncherListener = (ILauncherListener) activity;
+        }
+    }
+
 
     @Override
     public Object setLayout() {
@@ -74,6 +91,18 @@ public class LauncherScrollDelegate extends LatteDelegate implements OnItemClick
                     .setAppFlag(ScollLauncherTag.HAS_FIRST_LAUNCHER_APP.name(), true);
             Log.d(TAG, "点击的式最后一个" + "这是第 " + position + "个");
             //检查用户是否已经登陆
+
+            AccountManage.checkAccount(new IUserChecker() {
+                @Override
+                public void onSignIn() {
+                    mILauncherListener.onLauncherFinsh(OnLauncherFinshTag.SINGED);
+                }
+
+                @Override
+                public void onNotSignIn() {
+                    mILauncherListener.onLauncherFinsh(OnLauncherFinshTag.NOT_SINGED);
+                }
+            });
         } else {
             Log.d(TAG, "不是最后一个" + "这是第 " + position + "个");
         }

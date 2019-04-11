@@ -1,18 +1,25 @@
 package com.kaixugege.latte.ec.lanucher;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import android.widget.TextView;
+
 import androidx.appcompat.widget.AppCompatTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import com.kaixugege.latte.ec.R;
 import com.kaixugege.latte.ec.R2;
+import com.kaixugege.latte_core.app.AccountManage;
+import com.kaixugege.latte_core.app.IUserChecker;
 import com.kaixugege.latte_core.app.Latte;
 import com.kaixugege.latte_core.delegates.LatteDelegate;
+import com.kaixugege.latte_core.ui.launcher.ILauncherListener;
+import com.kaixugege.latte_core.ui.launcher.OnLauncherFinshTag;
 import com.kaixugege.latte_core.ui.launcher.ScollLauncherTag;
 import com.kaixugege.latte_core.util.Storage.LattePreference;
 import com.kaixugege.latte_core.util.timer.BaseTimerTask;
@@ -49,6 +56,16 @@ public class LauncherDelegate extends LatteDelegate implements ITimerListener {
         mTimer.schedule(task, 0, 1000);
     }
 
+    private ILauncherListener mILauncherListener = null;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof ILauncherListener) {
+            mILauncherListener = (ILauncherListener) activity;
+        }
+    }
 
     @Override
     public Object setLayout() {
@@ -79,14 +96,28 @@ public class LauncherDelegate extends LatteDelegate implements ITimerListener {
     }
 
 
-
     //判断是否显示滑动启动页
-    private void checkIsShowScroll(){
-        if (!LattePreference.getAppFlag(ScollLauncherTag.HAS_FIRST_LAUNCHER_APP.name())){
+    private void checkIsShowScroll() {
+        if (!LattePreference.getAppFlag(ScollLauncherTag.HAS_FIRST_LAUNCHER_APP.name())) {
             start(new LauncherScrollDelegate());
-        }else {
+        } else {
             Log.d("LauncherDelegate", "用户是第一次进入 app");
             //  检查用户是否登陆了 app
+            AccountManage.checkAccount(new IUserChecker() {
+                @Override
+                public void onSignIn() {
+                    if (mILauncherListener != null) {
+                        mILauncherListener.onLauncherFinsh(OnLauncherFinshTag.SINGED);
+                    }
+                }
+
+                @Override
+                public void onNotSignIn() {
+                    if (mILauncherListener != null) {
+                        mILauncherListener.onLauncherFinsh(OnLauncherFinshTag.NOT_SINGED);
+                    }
+                }
+            });
         }
     }
 
@@ -98,7 +129,7 @@ public class LauncherDelegate extends LatteDelegate implements ITimerListener {
                 Log.d("LauncherDelegate", "开始timer事件" + mCount);
                 if (mTvTimer != null) {
                     try {
-                        mTvTimer.setText(MessageFormat.format( "跳过\n{0}s",mCount));
+                        mTvTimer.setText(MessageFormat.format("跳过\n{0}s", mCount));
                     } catch (Exception ex) {
                         Log.d("LauncherDelegate", "" + ex.getMessage());
                     }
