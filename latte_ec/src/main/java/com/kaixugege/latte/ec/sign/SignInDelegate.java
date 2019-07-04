@@ -100,7 +100,7 @@ public class SignInDelegate extends LatteDelegate implements View.OnClickListene
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
-                RestClient.builder()
+                  RestClient.builder()
                         .url("http://192.168.10.23:80/RestDataServer/api/user_profile")
 //                        .url("https://www.baidu.com/")
                         .params("email", mEmail.getText().toString())

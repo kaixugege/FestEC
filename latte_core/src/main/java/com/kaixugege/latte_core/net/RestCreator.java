@@ -1,10 +1,12 @@
 package com.kaixugege.latte_core.net;
 
 import android.os.StatFs;
+
 import com.kaixugege.latte_core.app.ConfigKeys;
 import com.kaixugege.latte_core.app.ConfigType;
 import com.kaixugege.latte_core.app.Latte;
 import com.kaixugege.latte_core.net.rx.RxRestService;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -38,13 +40,16 @@ public class RestCreator {
 
 
     private static final class RetrofitHodle {
+
         private static final String BASE_URL = (String) Latte.getConfigurations()
                 .get(ConfigType.API_HOST.name());
+
         private static final Retrofit RETROFIT_CLIENT = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(OKHttpHolder.OK_HTTP_CLIENT)//对 okhtttp 进行的惰性初始化
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
+
     }
 
     private static final class OKHttpHolder {

@@ -83,4 +83,7 @@ dependencies {
 
     //Log
     api 'com.orhanobut:logger:2.1.1'
+
+    //微信
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 }

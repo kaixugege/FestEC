@@ -23,21 +23,24 @@ public final class Latte {
         return Configurator.getInstance().getLatteConfigs();
     }
 
-    public static Configurator getConfigurator(){
+    public static Configurator getConfigurator() {
         return Configurator.getInstance();
     }
 
-    public static <T> T  getConfigurations(Object key) {
+    public static <T> T getConfigurations(Object key) {
         return getConfigurator().getConfiguration(key);
     }
 
     public static Context getApplication() {
         return (Context) getConfigurations().get(ConfigType.APPLICATION_CONTEXT.name());
     }
+
     public static Context getApplicationContext() {
         return getConfiguration(ConfigKeys.APPLICATION_CONTEXT.name());
     }
+
     public static <T> T getConfiguration(Object key) {
         return getConfigurator().getConfiguration(key);
     }
+
 }

@@ -61,7 +61,10 @@ public class IndexDelegate extends BaseDelegate {
     //TODO:测试方法，没啥用
     void onCallRxRestClient() {
         final String url = "index.php";
-        RxRestClient.builder().url(url).build().get().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
+        RxRestClient.builder().url(url).build().get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
 
             @Override
             public void onSubscribe(Disposable d) {
